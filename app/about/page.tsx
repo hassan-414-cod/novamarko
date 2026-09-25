@@ -302,8 +302,8 @@ export default function About() {
                     </span>
                   </Link>
                   <div className="hidden md:block w-px h-6 bg-white/20" />
-                  <a href="mailto:hello@novamarko.com" className="flex items-center gap-2 text-white/80 hover:text-white transition-colors text-sm font-medium">
-                    <Mail size={16} /> hello@novamarko.com
+                  <a href="mailto:novamarko72@gmail.com" className="flex items-center gap-2 text-white/80 hover:text-white transition-colors text-sm font-medium">
+                    <Mail size={16} /> novamarko72@gmail.com
                   </a>
                   <div className="hidden md:block w-px h-6 bg-white/20" />
                   <span className="flex items-center gap-2 text-white/80 text-sm font-medium">

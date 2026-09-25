@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ArrowRight, Mail, MapPin, Calendar, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Mail, MapPin, Calendar, CheckCircle2, Instagram, Facebook } from 'lucide-react';
 import { Reveal } from '@/components/Reveal';
 
 const steps = [
@@ -15,20 +15,48 @@ const budgetOptions = ['Under $5,000', '$5,000 – $15,000', '$15,000 – $50,00
 export default function Contact() {
   const [form, setForm] = useState({ name: '', company: '', email: '', budget: budgetOptions[0], message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sentAutomatically, setSentAutomatically] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     setForm((f) => ({ ...f, [id]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const openMailtoFallback = () => {
     const subject = encodeURIComponent(`New project inquiry from ${form.name || 'website'}`);
     const body = encodeURIComponent(
       `Name: ${form.name}\nCompany: ${form.company}\nEmail: ${form.email}\nBudget range: ${form.budget}\n\nMessage:\n${form.message}`
     );
-    window.location.href = `mailto:hello@novamarko.com?subject=${subject}&body=${body}`;
-    setSubmitted(true);
+    window.location.href = `mailto:novamarko72@gmail.com?subject=${subject}&body=${body}`;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSending(true);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      if (res.ok) {
+        setSentAutomatically(true);
+        setSubmitted(true);
+      } else {
+        // Backend not configured yet (or a transient failure) — fall back to
+        // opening the visitor's own mail client, pre-addressed and pre-filled.
+        openMailtoFallback();
+        setSentAutomatically(false);
+        setSubmitted(true);
+      }
+    } catch {
+      openMailtoFallback();
+      setSentAutomatically(false);
+      setSubmitted(true);
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -80,7 +108,7 @@ export default function Contact() {
               </div>
               <div>
                 <h3 className="font-bold text-[#0A1428] mb-1">Email Us</h3>
-                <a href="mailto:hello@novamarko.com" className="text-[#0A1428]/70 hover:text-[#036FDE]">hello@novamarko.com</a>
+                <a href="mailto:novamarko72@gmail.com" className="text-[#0A1428]/70 hover:text-[#036FDE]">novamarko72@gmail.com</a>
               </div>
             </div>
             <div className="flex items-start gap-4">
@@ -98,9 +126,40 @@ export default function Contact() {
               </div>
               <div>
                 <h3 className="font-bold text-[#0A1428] mb-1">Prefer a Call?</h3>
-                <a href="mailto:hello@novamarko.com?subject=Strategy%20call%20request" className="text-[#0A1428]/70 hover:text-[#036FDE]">Email us to schedule a time</a>
+                <a href="mailto:novamarko72@gmail.com?subject=Strategy%20call%20request" className="text-[#0A1428]/70 hover:text-[#036FDE]">Email us to schedule a time</a>
               </div>
             </div>
+          </div>
+
+          <div className="flex items-center gap-4 mt-10">
+            <a
+              href="https://www.instagram.com/novamarkox/?hl=en"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Nova Marko on Instagram"
+              data-cursor-hover
+              className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-[#036FDE] shadow-sm hover:bg-[#036FDE] hover:text-white transition-colors"
+            >
+              <Instagram size={20} />
+            </a>
+            <a
+              href="https://www.facebook.com/novamarkox"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Nova Marko on Facebook"
+              data-cursor-hover
+              className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-[#036FDE] shadow-sm hover:bg-[#036FDE] hover:text-white transition-colors"
+            >
+              <Facebook size={20} />
+            </a>
+            <a
+              href="mailto:novamarko72@gmail.com"
+              aria-label="Email Nova Marko"
+              data-cursor-hover
+              className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-[#036FDE] shadow-sm hover:bg-[#036FDE] hover:text-white transition-colors"
+            >
+              <Mail size={20} />
+            </a>
           </div>
         </div>
 
@@ -110,10 +169,21 @@ export default function Contact() {
               <div className="w-16 h-16 rounded-full bg-[#EAF2FF] text-[#036FDE] flex items-center justify-center mb-6">
                 <CheckCircle2 size={32} />
               </div>
-              <h3 className="font-display text-2xl font-bold text-[#0A1428] mb-3">Almost there!</h3>
-              <p className="text-[#0A1428]/60 max-w-sm mb-6">
-                Your email client should now be open with your message pre-filled. Just hit send — we read every message personally and reply within 1 business day.
-              </p>
+              {sentAutomatically ? (
+                <>
+                  <h3 className="font-display text-2xl font-bold text-[#0A1428] mb-3">Message sent!</h3>
+                  <p className="text-[#0A1428]/60 max-w-sm mb-6">
+                    Your message just landed straight in our inbox — no extra step needed. We read every message personally and reply within 1 business day.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h3 className="font-display text-2xl font-bold text-[#0A1428] mb-3">Almost there!</h3>
+                  <p className="text-[#0A1428]/60 max-w-sm mb-6">
+                    Your email client should now be open with your message pre-filled. Just hit send — we read every message personally and reply within 1 business day.
+                  </p>
+                </>
+              )}
               <button
                 type="button"
                 onClick={() => setSubmitted(false)}
@@ -152,9 +222,13 @@ export default function Contact() {
                 <textarea required id="message" rows={4} value={form.message} onChange={handleChange} className="w-full px-4 py-3 rounded-xl border border-[#0A1428]/20 focus:border-[#036FDE] focus:ring-1 focus:ring-[#036FDE] outline-none transition-all" placeholder="What are you building, and what does success look like?"></textarea>
               </div>
 
-              <button type="submit" className="w-full bg-[#036FDE] text-white py-4 rounded-xl font-bold hover:bg-[#0057C6] transition-colors flex items-center justify-center gap-2">
-                Start the Conversation
-                <ArrowRight size={18} />
+              <button
+                type="submit"
+                disabled={sending}
+                className="w-full bg-[#036FDE] text-white py-4 rounded-xl font-bold hover:bg-[#0057C6] transition-colors flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {sending ? 'Sending…' : 'Start the Conversation'}
+                {!sending && <ArrowRight size={18} />}
               </button>
 
               <p className="text-center text-xs text-[#0A1428]/40">We read every message personally — expect a reply within 1 business day.</p>
@@ -166,7 +240,7 @@ export default function Contact() {
       <Reveal className="pt-24 text-center relative z-10">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="font-display text-3xl font-bold text-[#0A1428] mb-6">Prefer to talk it through first?</h2>
-          <a href="mailto:hello@novamarko.com" className="min-h-[44px] bg-gradient-signature text-white px-8 py-4 rounded-full text-[14px] font-bold inline-flex items-center gap-2 hover:scale-105 transition-transform shadow-lg" data-cursor-hover>
+          <a href="mailto:novamarko72@gmail.com" className="min-h-[44px] bg-gradient-signature text-white px-8 py-4 rounded-full text-[14px] font-bold inline-flex items-center gap-2 hover:scale-105 transition-transform shadow-lg" data-cursor-hover>
             Book a Free Strategy Call
             <ArrowRight size={18} strokeWidth={2.5} />
           </a>

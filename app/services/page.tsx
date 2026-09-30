@@ -110,7 +110,7 @@ const faqs = [
 
 export default function Services() {
   return (
-    <div className="w-full pt-32 pb-24 bg-white relative overflow-hidden">
+    <div className="w-full pb-24 bg-white relative overflow-hidden">
       {/* Hero */}
       <section className="relative min-h-[60vh] md:min-h-[68vh] flex items-end overflow-hidden bg-[#0A1428] mb-20">
         <div className="absolute inset-0">

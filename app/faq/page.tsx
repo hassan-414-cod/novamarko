@@ -33,7 +33,7 @@ export default function FAQ() {
   ];
 
   return (
-    <div className="w-full pt-32">
+    <div className="w-full">
       <section className="py-24 md:py-32 bg-[#F6F9FC] text-center">
         <div className="max-w-4xl mx-auto px-6">
           <h1 className="font-display text-4xl md:text-5xl font-black leading-tight tracking-tight text-[#0A1428] mb-6">

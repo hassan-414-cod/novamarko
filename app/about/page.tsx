@@ -65,7 +65,7 @@ const comparison = [
 
 export default function About() {
   return (
-    <div className="w-full pt-32">
+    <div className="w-full">
       {/* Hero */}
       <section className="relative min-h-[68vh] md:min-h-[75vh] flex items-center overflow-hidden bg-[#0A1428]">
         <div className="absolute inset-0">

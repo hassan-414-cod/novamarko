@@ -47,8 +47,12 @@ export function ApproachStack({ items }: { items: ApproachItem[] }) {
     let locked = false;
     applyProgress(0);
 
-    const isAtTopBoundary = () => section.getBoundingClientRect().top <= 0;
-    const isAtBottomBoundary = () => section.getBoundingClientRect().bottom >= window.innerHeight;
+    // A small buffer (rather than exactly 0) means engagement gets picked
+    // up a beat earlier, before a fast wheel/trackpad gesture has had a
+    // chance to carry the page much further past the edge.
+    const BOUNDARY_BUFFER = 80;
+    const isAtTopBoundary = () => section.getBoundingClientRect().top <= BOUNDARY_BUFFER;
+    const isAtBottomBoundary = () => section.getBoundingClientRect().bottom >= window.innerHeight - BOUNDARY_BUFFER;
 
     const setBodyLocked = (value: boolean) => {
       if (value) {
@@ -63,13 +67,15 @@ export function ApproachStack({ items }: { items: ApproachItem[] }) {
       }
     };
 
-    // Snap the page so the section fills the viewport, then hard-lock
-    // scrolling itself (not just wheel/touch) — this is what makes each
-    // card genuinely hold in place once it covers the last, instead of the
-    // page just continuing to scroll past it.
+    // Hard-lock scrolling itself (not just wheel/touch) right where the
+    // page already is — this is what makes each card genuinely hold in
+    // place once it covers the last, instead of the page continuing to
+    // scroll past it. Deliberately does NOT snap/reposition the scroll:
+    // boundary detection can only fire after a little scroll has already
+    // happened, and correcting that with scrollTo() is exactly what caused
+    // the visible jump-then-snap glitch — locking in place, wherever that
+    // is, keeps the transition smooth instead.
     const engage = () => {
-      const top = section.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo(0, top);
       setBodyLocked(true);
       locked = true;
     };

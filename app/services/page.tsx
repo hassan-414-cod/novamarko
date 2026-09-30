@@ -12,6 +12,7 @@ const groups = [
     Icon: BuildIcon,
     title: 'Build',
     intro: "The foundation everything else gets built on.",
+    image: '/images/services_build_concept_1790750617129.jpg',
     items: [
       {
         title: 'Brand Identity',
@@ -36,6 +37,7 @@ const groups = [
     Icon: BrandIcon,
     title: 'Brand',
     intro: "The story and positioning that make people care.",
+    image: '/images/services_brand_concept_1790750628902.jpg',
     items: [
       {
         title: 'Content Creation',
@@ -56,6 +58,7 @@ const groups = [
     Icon: ScaleIcon,
     title: 'Scale',
     intro: "Growth systems for what's already working.",
+    image: '/images/services_scale_concept_1790750641553.jpg',
     items: [
       {
         title: 'Performance Marketing',
@@ -140,18 +143,33 @@ export default function Services() {
       <section className="max-w-7xl mx-auto px-6 relative z-10 space-y-20">
         {groups.map((group, gi) => {
           const Icon = group.Icon;
+          const imageFirst = gi % 2 === 0;
           return (
             <Reveal key={group.key}>
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-xl bg-[#036FDE] text-white flex items-center justify-center shadow-[0_8px_20px_rgba(3,111,222,0.3)] shrink-0">
-                  <Icon size={22} />
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center mb-10">
+                <div className={`lg:col-span-5 ${imageFirst ? '' : 'lg:order-2'}`}>
+                  <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-[0_25px_60px_-20px_rgba(3,111,222,0.35)] ring-1 ring-[#0A1428]/5">
+                    <img
+                      src={group.image}
+                      alt={`${group.title} — ${group.intro}`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0A1428]/40 via-transparent to-transparent" />
+                  </div>
                 </div>
-                <div>
-                  <h2 className="font-display text-2xl md:text-3xl font-bold text-[#0A1428]">{group.title}</h2>
-                  <p className="text-[#0A1428]/50 text-sm">{group.intro}</p>
+
+                <div className={`lg:col-span-7 ${imageFirst ? '' : 'lg:order-1'}`}>
+                  <div className="flex items-center gap-4 mb-5">
+                    <div className="w-12 h-12 rounded-xl bg-[#036FDE] text-white flex items-center justify-center shadow-[0_8px_20px_rgba(3,111,222,0.3)] shrink-0">
+                      <Icon size={22} />
+                    </div>
+                    <div className="flex-1 h-px bg-[#0A1428]/10" />
+                    <div className="text-[10px] font-bold tracking-[0.2em] text-[#0A1428]/30 uppercase">0{gi + 1}</div>
+                  </div>
+                  <h2 className="font-display text-3xl md:text-4xl font-bold text-[#0A1428] mb-3">{group.title}</h2>
+                  <p className="text-[#0A1428]/60 text-lg leading-relaxed max-w-lg">{group.intro}</p>
                 </div>
-                <div className="hidden md:block flex-1 h-px bg-[#0A1428]/10 ml-4" />
-                <div className="hidden md:block text-[10px] font-bold tracking-[0.2em] text-[#0A1428]/30 uppercase">0{gi + 1}</div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

@@ -1,55 +1,13 @@
 'use client';
 
-import React, { useRef } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { Reveal } from '@/components/Reveal';
 import { Marquee } from '@/components/Marquee';
 import { BuildIcon, BrandIcon, ScaleIcon } from '@/components/AnimatedIcons';
-import { HeroFluidCanvas } from '@/components/HeroFluidCanvas';
 import { HeroVideoLoop } from '@/components/HeroVideoLoop';
 import { prefersReducedMotion } from '@/lib/motionPrefs';
-
-type Word = string | { text: string; blue?: true };
-const HEADLINE_LINES: Word[][] = [
-  ['We', 'Build', 'Brands,'],
-  ['Products,', 'Systems'],
-  ['and', { text: 'Growth.', blue: true }],
-];
-
-function AnimatedHeadline({ reduceMotion }: { reduceMotion: boolean }) {
-  let wordIndex = 0;
-  return (
-    <h1
-      className="font-display font-bold leading-[1.05] tracking-tight text-[#0A1428] mb-6"
-      style={{ fontSize: 'clamp(2.5rem, 1rem + 6vw, 4.75rem)' }}
-    >
-      {HEADLINE_LINES.map((line, li) => (
-        <span key={li} className="block">
-          {line.map((word, wi) => {
-            const isBlue = typeof word === 'object';
-            const text = isBlue ? word.text : word;
-            const idx = wordIndex++;
-            return (
-              <React.Fragment key={wi}>
-                <motion.span
-                  className={`inline-block ${isBlue ? 'text-[#036FDE]' : ''}`}
-                  initial={reduceMotion ? undefined : { opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={reduceMotion ? { duration: 0 } : { duration: 0.5, delay: idx * 0.06, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  {text}
-                </motion.span>
-                {wi < line.length - 1 && ' '}
-              </React.Fragment>
-            );
-          })}
-        </span>
-      ))}
-    </h1>
-  );
-}
 
 function ServiceCard({ item, i }: { item: any; i: number }) {
   const reduceMotion = prefersReducedMotion();
@@ -105,7 +63,6 @@ function ServiceCard({ item, i }: { item: any; i: number }) {
 
 export default function Home() {
   const reduceMotion = prefersReducedMotion();
-  const heroRef = useRef<HTMLElement>(null);
 
   const approachItems = [
     {
@@ -132,84 +89,6 @@ export default function Home() {
     <div className="w-full bg-white">
       {/* Looping story video — sits above the hero, full width of the page card */}
       <HeroVideoLoop />
-
-      {/* Hero Section */}
-      <section
-        ref={heroRef}
-        className="relative w-full min-h-screen overflow-hidden flex items-center justify-start bg-[#F4F7FB]"
-      >
-        {/* Gradient mesh: soft blue blobs in the brand palette, behind the product shot */}
-        <div className="absolute inset-0 z-0" aria-hidden="true">
-          <div className="absolute -top-32 -left-20 w-[520px] h-[520px] rounded-full bg-[#036FDE]/15 blur-[110px]" />
-          <div className="absolute top-1/3 left-1/4 w-[380px] h-[380px] rounded-full bg-[#60A5FA]/15 blur-[100px]" />
-          <div className="absolute -bottom-24 left-1/3 w-[460px] h-[460px] rounded-full bg-[#0057C6]/10 blur-[120px]" />
-        </div>
-
-
-        {/* Animated fluid gradient blobs — new layer, added underneath the
-            hero content only; everything above (photo, white gradient,
-            grain) is unchanged. */}
-        <HeroFluidCanvas />
-
-        {/* Subtle grain texture overlay */}
-        <div className="absolute inset-0 z-[2] bg-grain opacity-[0.035] mix-blend-multiply pointer-events-none" aria-hidden="true" />
-
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 w-full pt-32 pb-20 relative z-10 flex flex-col justify-center h-full">
-          <div className="max-w-2xl">
-
-            <AnimatedHeadline reduceMotion={reduceMotion} />
-
-            {/* Subheadline */}
-            <motion.p
-              initial={reduceMotion ? undefined : { opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={reduceMotion ? { duration: 0 } : { duration: 0.5, delay: 0.55 }}
-              className="text-[#0A1428]/70 text-[16px] md:text-[20px] font-medium leading-relaxed max-w-[500px] mb-10"
-            >
-              Nova Marko is a digital studio helping ambitious businesses design, build and scale through strategy, technology and performance marketing.
-            </motion.p>
-
-            {/* Buttons */}
-            <motion.div
-              initial={reduceMotion ? undefined : { opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={reduceMotion ? { duration: 0 } : { duration: 0.5, delay: 0.65 }}
-              className="flex flex-wrap items-center gap-4 md:gap-6 mb-16"
-            >
-              <Link href="/contact" className="min-h-[44px] bg-[#036FDE] text-white px-8 py-4 rounded-full text-[14px] md:text-[15px] font-semibold hover:bg-[#0057C6] shadow-xl hover:-translate-y-1 transition-all focus:outline-none flex items-center gap-2" data-cursor-hover>
-                Start Your Project
-                <ArrowRight size={18} />
-              </Link>
-              <Link href="/work" className="min-h-[44px] px-8 py-4 rounded-full text-[14px] md:text-[15px] font-semibold border-2 border-gray-200 text-[#0A1428] hover:border-gray-300 hover:bg-gray-50 transition-all focus:outline-none flex items-center" data-cursor-hover>
-                See Our Work
-              </Link>
-            </motion.div>
-
-            {/* Stats */}
-            <motion.div
-              initial={reduceMotion ? undefined : { opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={reduceMotion ? { duration: 0 } : { duration: 0.5, delay: 0.75 }}
-              className="flex items-center gap-8 md:gap-12"
-            >
-              <div>
-                <div className="font-bold text-2xl md:text-3xl text-[#0A1428] mb-1">50+</div>
-                <div className="text-[9px] md:text-[10px] font-bold tracking-widest text-[#0A1428]/50 uppercase">BRANDS BUILT</div>
-              </div>
-              <div className="w-[1px] h-10 bg-gray-200"></div>
-              <div>
-                <div className="font-bold text-2xl md:text-3xl text-[#0A1428] mb-1">3x</div>
-                <div className="text-[9px] md:text-[10px] font-bold tracking-widest text-[#0A1428]/50 uppercase">AVERAGE GROWTH</div>
-              </div>
-              <div className="w-[1px] h-10 bg-gray-200"></div>
-              <div>
-                <div className="font-bold text-2xl md:text-3xl text-[#0A1428] mb-1">100%</div>
-                <div className="text-[9px] md:text-[10px] font-bold tracking-widest text-[#0A1428]/50 uppercase">CLIENT FOCUSED</div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
       {/* Stats / industry marquee */}
       <Marquee />

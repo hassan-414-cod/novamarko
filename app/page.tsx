@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { Reveal } from '@/components/Reveal';
@@ -8,10 +7,8 @@ import { Marquee } from '@/components/Marquee';
 import { BuildIcon, BrandIcon, ScaleIcon } from '@/components/AnimatedIcons';
 import { HeroVideoLoop } from '@/components/HeroVideoLoop';
 import { ApproachStack } from '@/components/ApproachStack';
-import { prefersReducedMotion } from '@/lib/motionPrefs';
 
 export default function Home() {
-  const reduceMotion = prefersReducedMotion();
 
   const approachItems = [
     {
@@ -56,15 +53,11 @@ export default function Home() {
       </section>
 
       {/* What We Do — Build / Brand / Scale, staggered 150ms apart */}
-      <section className="py-24 bg-[#F7FAFC]">
-        <div className="max-w-7xl mx-auto px-6">
-          <Reveal className="text-center mb-16">
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-[#0A1428] mb-4">Our Approach</h2>
-            <p className="text-lg text-[#0A1428]/70 max-w-2xl mx-auto">A proven methodology to help you dominate your market.</p>
-          </Reveal>
-        </div>
-        <ApproachStack items={approachItems} />
-      </section>
+      <ApproachStack
+        title="Our Approach"
+        subtitle="A proven methodology to help you dominate your market."
+        items={approachItems}
+      />
 
       {/* Services Preview */}
       <Reveal className="py-24 bg-white">

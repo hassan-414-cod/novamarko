@@ -23,7 +23,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {/* Card shell: every page sits inset from the viewport edges, the
               animated blue backdrop showing through the margin around it. */}
           <div className="relative z-10 px-3 sm:px-4 md:px-6 lg:px-10 xl:px-14 pb-3 sm:pb-4 md:pb-6 lg:pb-10 xl:pb-14 pt-2 sm:pt-2 md:pt-3 lg:pt-5 xl:pt-6">
-            <div className="mx-auto max-w-[1680px] min-h-[calc(100dvh-1.25rem)] sm:min-h-[calc(100dvh-1.5rem)] md:min-h-[calc(100dvh-2.25rem)] lg:min-h-[calc(100dvh-3.75rem)] xl:min-h-[calc(100dvh-5rem)] flex flex-col rounded-[1.75rem] md:rounded-[2.5rem] overflow-hidden bg-[#F7FAFC] shadow-[0_40px_100px_-20px_rgba(2,20,60,0.55)]">
+            {/* Rounded-corner clipping uses clip-path rather than
+                overflow-hidden — overflow (any value but visible) on an
+                ancestor silently breaks position:sticky/fixed for every
+                descendant, which this shell wraps all of. clip-path clips
+                the same way visually without that side effect. */}
+            <div className="mx-auto max-w-[1680px] min-h-[calc(100dvh-1.25rem)] sm:min-h-[calc(100dvh-1.5rem)] md:min-h-[calc(100dvh-2.25rem)] lg:min-h-[calc(100dvh-3.75rem)] xl:min-h-[calc(100dvh-5rem)] flex flex-col rounded-[1.75rem] md:rounded-[2.5rem] [clip-path:inset(0_round_1.75rem)] md:[clip-path:inset(0_round_2.5rem)] bg-[#F7FAFC] shadow-[0_40px_100px_-20px_rgba(2,20,60,0.55)]">
               <main className="flex-1 w-full">{children}</main>
               <Footer />
             </div>

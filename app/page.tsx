@@ -145,15 +145,6 @@ export default function Home() {
           <div className="absolute -bottom-24 left-1/3 w-[460px] h-[460px] rounded-full bg-[#0057C6]/10 blur-[120px]" />
         </div>
 
-        <div
-          className="absolute inset-0 z-0 bg-no-repeat w-full h-full"
-          style={{
-            backgroundImage: "url('/hero-bg.png')",
-            backgroundSize: "auto 100%",
-            backgroundPosition: "right top"
-          }}
-        ></div>
-        <div className="absolute inset-0 z-0 bg-gradient-to-r from-white via-white/80 to-transparent w-full md:w-2/3"></div>
 
         {/* Animated fluid gradient blobs — new layer, added underneath the
             hero content only; everything above (photo, white gradient,

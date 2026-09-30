@@ -7,66 +7,8 @@ import { Reveal } from '@/components/Reveal';
 import { Marquee } from '@/components/Marquee';
 import { BuildIcon, BrandIcon, ScaleIcon } from '@/components/AnimatedIcons';
 import { HeroVideoLoop } from '@/components/HeroVideoLoop';
+import { ApproachStack } from '@/components/ApproachStack';
 import { prefersReducedMotion } from '@/lib/motionPrefs';
-
-function ServiceCard({ item, i, isLast }: { item: any; i: number; isLast: boolean }) {
-  const reduceMotion = prefersReducedMotion();
-
-  // Sticky stack (desktop only — needs a fixed card height to calibrate):
-  // each non-last card sits in a tall wrapper that holds it pinned at
-  // top-28 for a stretch of scroll. A negative top margin on every card
-  // after the first pulls its wrapper up so that stretch overlaps the
-  // *previous* card's own pinned stretch — without that overlap, sticky
-  // elements just hand off to each other with a gap in between and never
-  // actually cover one another. Higher z-index on later cards is what
-  // makes each new one paint over the last during that overlap window.
-  // Mobile keeps it simple: plain stacked cards, no pinning.
-  const wrapperClasses = [
-    'relative',
-    i > 0 ? 'md:-mt-[430px]' : '',
-    !isLast ? 'md:h-[150vh]' : '',
-  ].filter(Boolean).join(' ');
-
-  return (
-    <div className={wrapperClasses} style={{ zIndex: i + 1 }}>
-      <motion.div
-        initial={reduceMotion ? undefined : { opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-100px' }}
-        transition={reduceMotion ? { duration: 0 } : { duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        style={{ boxShadow: '0 30px 70px -20px rgba(10,20,40,0.55)' }}
-        data-cursor-hover
-        className="mb-6 md:mb-0 md:sticky md:top-28 bg-[#0A1428] rounded-[2rem] overflow-hidden flex flex-col md:flex-row md:h-[380px]"
-      >
-        <div className="relative h-48 md:h-full md:w-[42%] shrink-0 overflow-hidden">
-          <img
-            src={item.image}
-            alt={item.title}
-            className="w-full h-full object-cover opacity-70"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#0A1428] via-[#0A1428]/50 to-transparent" />
-          <div className="absolute bottom-6 left-6 md:hidden">
-            <div className="w-14 h-14 rounded-2xl bg-[#036FDE] flex items-center justify-center text-white shadow-[0_8px_30px_rgba(3,111,222,0.4)]">
-              {item.icon(24, i * 0.1, reduceMotion)}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex-1 p-8 md:p-10 lg:p-12 flex flex-col justify-center">
-          <div className="hidden md:flex w-14 h-14 rounded-2xl bg-[#036FDE] items-center justify-center text-white shadow-[0_8px_30px_rgba(3,111,222,0.4)] mb-6">
-            {item.icon(24, i * 0.1, reduceMotion)}
-          </div>
-          <h3 className="font-display font-bold text-3xl md:text-4xl text-white mb-4">
-            {item.title}
-          </h3>
-          <p className="text-white/70 leading-relaxed font-medium text-lg max-w-md">
-            {item.desc}
-          </p>
-        </div>
-      </motion.div>
-    </div>
-  );
-}
 
 export default function Home() {
   const reduceMotion = prefersReducedMotion();
@@ -120,12 +62,8 @@ export default function Home() {
             <h2 className="font-display text-4xl md:text-5xl font-bold text-[#0A1428] mb-4">Our Approach</h2>
             <p className="text-lg text-[#0A1428]/70 max-w-2xl mx-auto">A proven methodology to help you dominate your market.</p>
           </Reveal>
-          <div className="max-w-4xl mx-auto">
-            {approachItems.map((item, i) => (
-              <ServiceCard key={i} item={item} i={i} isLast={i === approachItems.length - 1} />
-            ))}
-          </div>
         </div>
+        <ApproachStack items={approachItems} />
       </section>
 
       {/* Services Preview */}

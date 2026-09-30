@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <div className="min-h-screen selection:bg-[#036FDE]/20 selection:text-[#0A1428]">
           <JellyfishBackground />
           <CursorFollower />

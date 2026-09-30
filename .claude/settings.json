@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ffprobe -v error -show_entries format=duration,size -show_entries stream=width,height,codec_name -of default=noprint_wrappers=1 \"/c/Users/hassa/Downloads/1_Cinematic, p_PixVerse 6_540p_3s.mp4\")",
+      "Bash(mkdir -p public/videos)",
+      "Bash(cp \"/c/Users/hassa/Downloads/1_Cinematic, p_PixVerse 6_540p_3s.mp4\" public/videos/hero-mini-player.mp4)",
+      "Bash(python3 -c ' *)"
+    ]
+  }
+}

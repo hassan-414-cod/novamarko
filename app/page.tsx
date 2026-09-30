@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { Reveal } from '@/components/Reveal';
 import { Marquee } from '@/components/Marquee';
 import { BuildIcon, BrandIcon, ScaleIcon } from '@/components/AnimatedIcons';
+import { HeroFluidCanvas } from '@/components/HeroFluidCanvas';
+import { HeroVideoLoop } from '@/components/HeroVideoLoop';
 import { prefersReducedMotion } from '@/lib/motionPrefs';
 
 type Word = string | { text: string; blue?: true };
@@ -128,6 +130,9 @@ export default function Home() {
 
   return (
     <div className="w-full bg-white">
+      {/* Looping story video — sits above the hero, full width of the page card */}
+      <HeroVideoLoop />
+
       {/* Hero Section */}
       <section
         ref={heroRef}
@@ -149,8 +154,14 @@ export default function Home() {
           }}
         ></div>
         <div className="absolute inset-0 z-0 bg-gradient-to-r from-white via-white/80 to-transparent w-full md:w-2/3"></div>
+
+        {/* Animated fluid gradient blobs — new layer, added underneath the
+            hero content only; everything above (photo, white gradient,
+            grain) is unchanged. */}
+        <HeroFluidCanvas />
+
         {/* Subtle grain texture overlay */}
-        <div className="absolute inset-0 z-[1] bg-grain opacity-[0.035] mix-blend-multiply pointer-events-none" aria-hidden="true" />
+        <div className="absolute inset-0 z-[2] bg-grain opacity-[0.035] mix-blend-multiply pointer-events-none" aria-hidden="true" />
 
         <div className="max-w-7xl mx-auto px-6 lg:px-12 w-full pt-32 pb-20 relative z-10 flex flex-col justify-center h-full">
           <div className="max-w-2xl">

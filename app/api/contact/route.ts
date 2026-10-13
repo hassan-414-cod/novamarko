@@ -26,14 +26,22 @@ export async function POST(request: Request) {
     );
   }
 
-  let body: { name?: string; company?: string; email?: string; budget?: string; message?: string };
+  let body: {
+    name?: string;
+    company?: string;
+    email?: string;
+    budget?: string;
+    message?: string;
+    serviceTypes?: string[];
+    adCampaign?: boolean;
+  };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ ok: false, reason: 'invalid_body' }, { status: 400 });
   }
 
-  const { name, company, email, budget, message } = body;
+  const { name, company, email, budget, message, serviceTypes, adCampaign } = body;
 
   if (!name?.trim() || !email?.trim() || !message?.trim()) {
     return NextResponse.json({ ok: false, reason: 'missing_fields' }, { status: 400 });
@@ -62,6 +70,7 @@ export async function POST(request: Request) {
         `Name: ${name}`,
         `Company: ${company || 'N/A'}`,
         `Email: ${email}`,
+        `Looking for: ${serviceTypes?.length ? serviceTypes.join(', ') : 'N/A'}${adCampaign ? ' + ad campaign' : ''}`,
         `Budget range: ${budget || 'N/A'}`,
         '',
         'Message:',
@@ -72,6 +81,7 @@ export async function POST(request: Request) {
           <p><strong>Name:</strong> ${escapeHtml(name)}</p>
           <p><strong>Company:</strong> ${escapeHtml(company || 'N/A')}</p>
           <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+          <p><strong>Looking for:</strong> ${escapeHtml(serviceTypes?.length ? serviceTypes.join(', ') : 'N/A')}${adCampaign ? ' + ad campaign' : ''}</p>
           <p><strong>Budget range:</strong> ${escapeHtml(budget || 'N/A')}</p>
           <p><strong>Message:</strong></p>
           <p style="white-space: pre-wrap;">${escapeHtml(message)}</p>

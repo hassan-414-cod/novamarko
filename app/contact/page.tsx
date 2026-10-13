@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
-import { ArrowRight, Mail, MapPin, Calendar, CheckCircle2, Instagram, Facebook } from 'lucide-react';
+import { Mail, MapPin, Calendar, Instagram, Facebook, ArrowRight } from 'lucide-react';
 import { Reveal } from '@/components/Reveal';
+import { ProjectWizard } from '@/components/ProjectWizard';
 
 const steps = [
   { num: '01', title: 'Discovery Call', desc: "A short call to understand your goals — no pitch, just questions." },
@@ -10,55 +10,7 @@ const steps = [
   { num: '03', title: 'Kickoff', desc: "Once you're ready, we start within days, not months." },
 ];
 
-const budgetOptions = ['Under $5,000', '$5,000 – $15,000', '$15,000 – $50,000', '$50,000+', 'Not sure yet'];
-
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', company: '', email: '', budget: budgetOptions[0], message: '' });
-  const [submitted, setSubmitted] = useState(false);
-  const [sending, setSending] = useState(false);
-  const [sentAutomatically, setSentAutomatically] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { id, value } = e.target;
-    setForm((f) => ({ ...f, [id]: value }));
-  };
-
-  const openMailtoFallback = () => {
-    const subject = encodeURIComponent(`New project inquiry from ${form.name || 'website'}`);
-    const body = encodeURIComponent(
-      `Name: ${form.name}\nCompany: ${form.company}\nEmail: ${form.email}\nBudget range: ${form.budget}\n\nMessage:\n${form.message}`
-    );
-    window.location.href = `mailto:novamarko72@gmail.com?subject=${subject}&body=${body}`;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSending(true);
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
-      if (res.ok) {
-        setSentAutomatically(true);
-        setSubmitted(true);
-      } else {
-        // Backend not configured yet (or a transient failure) — fall back to
-        // opening the visitor's own mail client, pre-addressed and pre-filled.
-        openMailtoFallback();
-        setSentAutomatically(false);
-        setSubmitted(true);
-      }
-    } catch {
-      openMailtoFallback();
-      setSentAutomatically(false);
-      setSubmitted(true);
-    } finally {
-      setSending(false);
-    }
-  };
-
   return (
     <div className="w-full pb-24 bg-white relative overflow-hidden">
       {/* Hero */}
@@ -163,78 +115,7 @@ export default function Contact() {
           </div>
         </div>
 
-        <div className="bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-[#0A1428]/5">
-          {submitted ? (
-            <div className="h-full flex flex-col items-center justify-center text-center py-16">
-              <div className="w-16 h-16 rounded-full bg-[#EAF2FF] text-[#036FDE] flex items-center justify-center mb-6">
-                <CheckCircle2 size={32} />
-              </div>
-              {sentAutomatically ? (
-                <>
-                  <h3 className="font-display text-2xl font-bold text-[#0A1428] mb-3">Message sent!</h3>
-                  <p className="text-[#0A1428]/60 max-w-sm mb-6">
-                    Your message just landed straight in our inbox — no extra step needed. We read every message personally and reply within 1 business day.
-                  </p>
-                </>
-              ) : (
-                <>
-                  <h3 className="font-display text-2xl font-bold text-[#0A1428] mb-3">Almost there!</h3>
-                  <p className="text-[#0A1428]/60 max-w-sm mb-6">
-                    Your email client should now be open with your message pre-filled. Just hit send — we read every message personally and reply within 1 business day.
-                  </p>
-                </>
-              )}
-              <button
-                type="button"
-                onClick={() => setSubmitted(false)}
-                className="text-[#036FDE] font-semibold hover:text-[#0057C6] transition-colors"
-              >
-                ← Edit message
-              </button>
-            </div>
-          ) : (
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-bold text-[#0A1428] mb-2">Full Name</label>
-                  <input required type="text" id="name" value={form.name} onChange={handleChange} className="w-full px-4 py-3 rounded-xl border border-[#0A1428]/20 focus:border-[#036FDE] focus:ring-1 focus:ring-[#036FDE] outline-none transition-all" placeholder="Jane Doe" />
-                </div>
-                <div>
-                  <label htmlFor="company" className="block text-sm font-bold text-[#0A1428] mb-2">Company</label>
-                  <input type="text" id="company" value={form.company} onChange={handleChange} className="w-full px-4 py-3 rounded-xl border border-[#0A1428]/20 focus:border-[#036FDE] focus:ring-1 focus:ring-[#036FDE] outline-none transition-all" placeholder="Acme Corp" />
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-bold text-[#0A1428] mb-2">Email Address</label>
-                <input required type="email" id="email" value={form.email} onChange={handleChange} className="w-full px-4 py-3 rounded-xl border border-[#0A1428]/20 focus:border-[#036FDE] focus:ring-1 focus:ring-[#036FDE] outline-none transition-all" placeholder="jane@example.com" />
-              </div>
-
-              <div>
-                <label htmlFor="budget" className="block text-sm font-bold text-[#0A1428] mb-2">Budget Range</label>
-                <select id="budget" value={form.budget} onChange={handleChange} className="w-full px-4 py-3 rounded-xl border border-[#0A1428]/20 focus:border-[#036FDE] focus:ring-1 focus:ring-[#036FDE] outline-none transition-all bg-white">
-                  {budgetOptions.map((opt) => <option key={opt}>{opt}</option>)}
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-bold text-[#0A1428] mb-2">Tell Us About Your Project</label>
-                <textarea required id="message" rows={4} value={form.message} onChange={handleChange} className="w-full px-4 py-3 rounded-xl border border-[#0A1428]/20 focus:border-[#036FDE] focus:ring-1 focus:ring-[#036FDE] outline-none transition-all" placeholder="What are you building, and what does success look like?"></textarea>
-              </div>
-
-              <button
-                type="submit"
-                disabled={sending}
-                className="w-full bg-[#036FDE] text-white py-4 rounded-xl font-bold hover:bg-[#0057C6] transition-colors flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {sending ? 'Sending…' : 'Start the Conversation'}
-                {!sending && <ArrowRight size={18} />}
-              </button>
-
-              <p className="text-center text-xs text-[#0A1428]/40">We read every message personally — expect a reply within 1 business day.</p>
-            </form>
-          )}
-        </div>
+        <ProjectWizard />
       </section>
 
       <Reveal className="pt-24 text-center relative z-10">
